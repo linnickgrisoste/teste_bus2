@@ -1,35 +1,29 @@
 import 'package:equatable/equatable.dart';
 import 'package:teste_bus2/data/models/user_model.dart';
 
-abstract class UserState extends Equatable {
-  const UserState();
+enum AppStatus { intial, success, error, loading }
 
-  @override
-  List<Object?> get props => [];
-}
-
-class UserInitial extends UserState {
-  const UserInitial();
-}
-
-class UserLoading extends UserState {
-  const UserLoading();
-}
-
-class UserSuccess extends UserState {
+class UserState extends Equatable {
+  final AppStatus status;
+  final String errorMessage;
   final List<UserModel> users;
+  const UserState({required this.status, required this.users, required this.errorMessage});
 
-  const UserSuccess(this.users);
+  factory UserState.initial() => UserState(status: AppStatus.intial, users: [], errorMessage: '');
 
-  @override
-  List<Object?> get props => [users];
-}
+  bool get isEmpty => status == AppStatus.success && users.isEmpty;
+  bool get isLoading => status == AppStatus.loading;
 
-class UserError extends UserState {
-  final String message;
-
-  const UserError(this.message);
+  List<UserModel> get femaleUsers => users.where((user) => user.gender == 'female').toList();
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [status, users, errorMessage];
+
+  UserState copyWith({AppStatus? status, List<UserModel>? users, String? errorMessage}) {
+    return UserState(
+      errorMessage: errorMessage ?? this.errorMessage,
+      users: users ?? this.users,
+      status: status ?? this.status,
+    );
+  }
 }

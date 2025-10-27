@@ -24,67 +24,70 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: userCubit,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Pessoas', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20)),
-          centerTitle: false,
-          elevation: 2,
-          backgroundColor: Colors.white,
-          shadowColor: Colors.black,
-          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.storage))],
-        ),
-        body: BlocBuilder<UserCubit, UserState>(
-          builder: (context, state) {
-            if (state is UserLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pessoas', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20)),
+        centerTitle: false,
+        elevation: 2,
+        backgroundColor: Colors.white,
+        shadowColor: Colors.black,
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.storage))],
+      ),
+      body: BlocBuilder<UserCubit, UserState>(
+        bloc: userCubit,
+        builder: (context, state) {
+          if (state.status == AppStatus.loading && state.users.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            if (state is UserError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                    const SizedBox(height: 16),
-                    Text(state.message, style: const TextStyle(fontSize: 16), textAlign: TextAlign.center),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<UserCubit>().fetchUsers();
-                      },
-                      child: const Text('Tentar Novamente'),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            if (state is UserSuccess) {
-              final users = state.users;
-
-              if (users.isEmpty) {
-                return const Center(child: Text('Nenhum usuário encontrado'));
-              }
-
-              return ListView.builder(
-                itemCount: users.length,
-                itemBuilder: (context, index) {
-                  final user = users[index];
-                  return UserItem(
-                    user: user,
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => UserDetailScreen(user: user)));
+          if (state.status == AppStatus.error) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text(state.errorMessage, style: const TextStyle(fontSize: 16), textAlign: TextAlign.center),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<UserCubit>().fetchUsers();
                     },
-                  );
-                },
-              );
+                    child: const Text('Tentar Novamente'),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          if (state.status == AppStatus.success || state.users.isNotEmpty) {
+            final users = state.users;
+
+            if (users.isEmpty) {
+              return const Center(child: Text('Nenhum usuário encontrado'));
             }
 
-            return const Center(child: Text('Carregando usuários...'));
-          },
-        ),
+            return ListView.builder(
+              itemCount: users.length,
+              itemBuilder: (context, index) {
+                final user = users[index];
+                return Column(
+                  children: [
+                    UserItem(
+                      user: user,
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => UserDetailScreen(user: user)));
+                      },
+                    ),
+                    Visibility(visible: state.isLoading && index == users.length - 1, child: LinearProgressIndicator()),
+                  ],
+                );
+              },
+            );
+          }
+
+          return const Center(child: Text('Carregando usuários...'));
+        },
       ),
     );
   }
