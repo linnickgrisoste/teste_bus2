@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               );
             }
 
-            return const Center(child: Text('Carregue os usuários'));
+            return const Center(child: Text('Carregando usuários...'));
           },
         ),
       ),

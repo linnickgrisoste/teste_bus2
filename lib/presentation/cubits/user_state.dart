@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:teste_bus2/models/user.dart';
+import 'package:teste_bus2/data/models/user_model.dart';
 
 abstract class UserState extends Equatable {
   const UserState();
@@ -17,7 +17,7 @@ class UserLoading extends UserState {
 }
 
 class UserSuccess extends UserState {
-  final List<User> users;
+  final List<UserModel> users;
 
   const UserSuccess(this.users);
 

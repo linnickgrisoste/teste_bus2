@@ -1,8 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:teste_bus2/models/user.dart';
+import 'package:teste_bus2/data/models/user_model.dart';
 
 class UserDetailScreen extends StatelessWidget {
-  final User user;
+  final UserModel user;
 
   const UserDetailScreen({super.key, required this.user});
 
@@ -27,7 +28,7 @@ class UserDetailScreen extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 60,
-                    backgroundImage: NetworkImage(user.picture.large),
+                    backgroundImage: CachedNetworkImageProvider(user.picture.large),
                     backgroundColor: Colors.grey[300],
                   ),
                   const SizedBox(height: 16),

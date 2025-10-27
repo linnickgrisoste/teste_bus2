@@ -1,22 +1,22 @@
+import 'package:teste_bus2/data/models/user_model.dart';
 import 'package:teste_bus2/data/services/api_provider.dart';
-import 'package:teste_bus2/data/services/api_service.dart';
-import 'package:teste_bus2/models/user.dart';
+import 'package:teste_bus2/data/services/user_service.dart';
 
 abstract class UserRepositoryProtocol {
   void getUser({required Success success, required Failure failure});
 }
 
 class UserRepository extends UserRepositoryProtocol {
-  final ApiService apiService;
+  final UserService userService;
 
-  UserRepository({required this.apiService});
+  UserRepository({required this.userService});
 
   @override
   void getUser({required Success success, required Failure failure}) {
-    apiService.getUser(
+    userService.getUser(
       success: (response) {
         try {
-          final user = User.fromMap(response['results'][0]);
+          final user = UserModel.fromMap(response['results'][0]);
           success.call(user);
         } on Exception catch (error) {
           failure.call(error);
