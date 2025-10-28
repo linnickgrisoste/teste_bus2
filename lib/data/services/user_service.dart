@@ -1,4 +1,4 @@
-import 'package:teste_bus2/data/services/api_provider.dart';
+import 'package:teste_bus2/data/services/setup/api_provider.dart';
 import 'package:teste_bus2/data/services/setup/endpoint.dart';
 
 class UserService {

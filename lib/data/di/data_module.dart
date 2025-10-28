@@ -1,4 +1,6 @@
 import 'package:teste_bus2/data/repositories/user_repository.dart';
+import 'package:teste_bus2/data/services/local_user_service.dart';
+import 'package:teste_bus2/data/services/setup/database_provider.dart';
 import 'package:teste_bus2/data/services/user_service.dart';
 import 'package:teste_bus2/support/service_locator/app_module.dart';
 import 'package:teste_bus2/support/service_locator/service_locator.dart';
@@ -6,8 +8,14 @@ import 'package:teste_bus2/support/service_locator/service_locator.dart';
 class DataModule implements AppModule {
   @override
   void registerDependencies() {
+    /// MARK: Database
+    ServiceLocator.registerSingleton<DatabaseProvider>(DatabaseProvider.instance);
+
     /// MARK: Services
     ServiceLocator.registerLazySingleton<UserService>(() => UserService());
+    ServiceLocator.registerLazySingleton<LocalUserService>(
+      () => LocalUserService(databaseProvider: ServiceLocator.get()),
+    );
 
     /// MARK: Repositories
     ServiceLocator.registerLazySingleton<UserRepositoryProtocol>(

@@ -1,5 +1,5 @@
 import 'package:teste_bus2/data/models/user_model.dart';
-import 'package:teste_bus2/data/services/api_provider.dart';
+import 'package:teste_bus2/data/services/setup/api_provider.dart';
 import 'package:teste_bus2/data/services/user_service.dart';
 
 abstract class UserRepositoryProtocol {
