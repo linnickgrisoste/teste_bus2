@@ -1,17 +1,18 @@
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teste_bus2/core/app_status.dart';
 import 'package:teste_bus2/core/ticker/ticker_manager.dart';
 import 'package:teste_bus2/data/repositories/user_repository.dart';
-import 'package:teste_bus2/presentation/cubits/user_state.dart';
+import 'package:teste_bus2/presentation/views/home/cubit/home_state.dart';
 
-class UserCubit extends Cubit<UserState> {
+class HomeCubit extends Cubit<HomeState> {
   final UserRepositoryProtocol _userRepository;
   final TickerManagerProtocol _tickerManager;
 
-  UserCubit({required UserRepositoryProtocol userRepository, required TickerManagerProtocol tickerManager})
+  HomeCubit({required UserRepositoryProtocol userRepository, required TickerManagerProtocol tickerManager})
     : _tickerManager = tickerManager,
       _userRepository = userRepository,
-      super(UserState.initial());
+      super(HomeState.initial());
 
   void startUserFetching(TickerProvider vsync) {
     _tickerManager.onTick = fetchUsers;
@@ -31,7 +32,7 @@ class UserCubit extends Cubit<UserState> {
   }
 
   void clearUsers() {
-    emit(state.copyWith(status: AppStatus.intial, users: []));
+    emit(state.copyWith(status: AppStatus.initial, users: []));
   }
 
   @override

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:teste_bus2/presentation/cubits/user_cubit.dart';
-import 'package:teste_bus2/presentation/cubits/user_state.dart';
+import 'package:teste_bus2/core/app_status.dart';
+import 'package:teste_bus2/presentation/views/home/cubit/home_cubit.dart';
+import 'package:teste_bus2/presentation/views/home/cubit/home_state.dart';
+import 'package:teste_bus2/presentation/views/saved_users/saved_users_screen.dart';
 import 'package:teste_bus2/presentation/views/user_detail/user_detail_screen.dart';
 import 'package:teste_bus2/presentation/views/widgets/user_item.dart';
 import 'package:teste_bus2/support/service_locator/service_locator.dart';
@@ -14,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
-  final userCubit = ServiceLocator.get<UserCubit>();
+  final userCubit = ServiceLocator.get<HomeCubit>();
 
   @override
   void initState() {
@@ -31,9 +33,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         elevation: 2,
         backgroundColor: Colors.white,
         shadowColor: Colors.black,
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.storage))],
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const SavedUsersScreen()));
+            },
+            icon: const Icon(Icons.storage),
+            tooltip: 'Usuários Salvos',
+          ),
+        ],
       ),
-      body: BlocBuilder<UserCubit, UserState>(
+      body: BlocBuilder<HomeCubit, HomeState>(
         bloc: userCubit,
         builder: (context, state) {
           if (state.status == AppStatus.loading && state.users.isEmpty) {
@@ -51,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<UserCubit>().fetchUsers();
+                      context.read<HomeCubit>().fetchUsers();
                     },
                     child: const Text('Tentar Novamente'),
                   ),

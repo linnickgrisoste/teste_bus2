@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:teste_bus2/data/di/data_module.dart';
 import 'package:teste_bus2/presentation/views/home/di/home_module.dart';
+import 'package:teste_bus2/presentation/views/saved_users/di/saved_users_module.dart';
+import 'package:teste_bus2/presentation/views/user_detail/di/user_detail_module.dart';
 import 'package:teste_bus2/support/service_locator/app_module.dart';
 
 class ServiceLocator {
@@ -34,7 +36,7 @@ class ServiceLocator {
 }
 
 void initializeDependencies() {
-  final appModules = <AppModule>[DataModule(), HomeModule()];
+  final appModules = <AppModule>[DataModule(), HomeModule(), UserDetailModule(), SavedUsersModule()];
 
   for (final module in appModules) {
     module.registerDependencies();

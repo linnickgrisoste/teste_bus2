@@ -13,13 +13,13 @@ class DataModule implements AppModule {
 
     /// MARK: Services
     ServiceLocator.registerLazySingleton<UserService>(() => UserService());
-    ServiceLocator.registerLazySingleton<LocalUserService>(
+    ServiceLocator.registerLazySingleton<LocalUserServiceProtocol>(
       () => LocalUserService(databaseProvider: ServiceLocator.get()),
     );
 
     /// MARK: Repositories
     ServiceLocator.registerLazySingleton<UserRepositoryProtocol>(
-      () => UserRepository(userService: ServiceLocator.get()),
+      () => UserRepository(userService: ServiceLocator.get(), localUserService: ServiceLocator.get()),
     );
   }
 }

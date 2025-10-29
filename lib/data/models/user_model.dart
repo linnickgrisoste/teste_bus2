@@ -40,6 +40,23 @@ class UserModel extends UserEntity {
     );
   }
 
+  factory UserModel.fromEntity(UserEntity entity) {
+    return UserModel(
+      gender: entity.gender,
+      name: entity.name,
+      location: entity.location,
+      email: entity.email,
+      login: entity.login,
+      dob: entity.dob,
+      registered: entity.registered,
+      phone: entity.phone,
+      cell: entity.cell,
+      id: entity.id,
+      picture: entity.picture,
+      nat: entity.nat,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'gender': gender,
