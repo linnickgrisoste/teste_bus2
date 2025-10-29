@@ -33,6 +33,10 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^5.0.0
+  
+  # Testing
+  bloc_test: ^9.1.7
+  mocktail: ^1.0.4
 
 flutter:
   uses-material-design: true
