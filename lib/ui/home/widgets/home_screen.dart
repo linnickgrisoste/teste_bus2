@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste_bus2/core/app_status.dart';
 import 'package:teste_bus2/di/service_locator.dart';
+import 'package:teste_bus2/ui/core/ui/empty_state_widget.dart';
+import 'package:teste_bus2/ui/core/ui/error_state_widget.dart';
+import 'package:teste_bus2/ui/core/ui/themed_app_bar.dart';
 import 'package:teste_bus2/ui/core/ui/user_item.dart';
 import 'package:teste_bus2/ui/home/view_model/home_cubit.dart';
 import 'package:teste_bus2/ui/home/view_model/home_state.dart';
@@ -27,18 +30,15 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pessoas', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20)),
-        centerTitle: false,
-        elevation: 2,
-        backgroundColor: Colors.white,
-        shadowColor: Colors.black,
+      backgroundColor: Colors.grey.shade50,
+      appBar: ThemedAppBar(
+        title: 'Pessoas',
         actions: [
           IconButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const SavedUsersScreen()));
             },
-            icon: const Icon(Icons.storage),
+            icon: const Icon(Icons.bookmark_outline),
             tooltip: 'Usuários Salvos',
           ),
         ],
@@ -47,26 +47,15 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         bloc: userCubit,
         builder: (context, state) {
           if (state.status == AppStatus.loading && state.users.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF5E72E4))),
+            );
           }
 
           if (state.status == AppStatus.error) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                  const SizedBox(height: 16),
-                  Text(state.errorMessage, style: const TextStyle(fontSize: 16), textAlign: TextAlign.center),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<HomeCubit>().fetchUsers();
-                    },
-                    child: const Text('Tentar Novamente'),
-                  ),
-                ],
-              ),
+            return ErrorStateWidget(
+              errorMessage: state.errorMessage,
+              onRetry: () => context.read<HomeCubit>().fetchUsers(),
             );
           }
 
@@ -74,29 +63,52 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             final users = state.users;
 
             if (users.isEmpty) {
-              return const Center(child: Text('Nenhum usuário encontrado'));
+              return const EmptyStateWidget(icon: Icons.people_outline, title: 'Nenhum usuário encontrado');
             }
 
             return ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               itemCount: users.length,
               itemBuilder: (context, index) {
                 final user = users[index];
                 return Column(
                   children: [
-                    UserItem(
-                      user: user,
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => UserDetailScreen(user: user)));
-                      },
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: UserItem(
+                        user: user,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => UserDetailScreen(user: user)),
+                          );
+                        },
+                      ),
                     ),
-                    Visibility(visible: state.isLoading && index == users.length - 1, child: LinearProgressIndicator()),
+                    if (state.isLoading && index == users.length - 1)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: LinearProgressIndicator(
+                          color: const Color(0xFF5E72E4),
+                          backgroundColor: Colors.grey.shade200,
+                        ),
+                      ),
                   ],
                 );
               },
             );
           }
 
-          return const Center(child: Text('Carregando usuários...'));
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF5E72E4))),
+                const SizedBox(height: 16),
+                Text('Carregando usuários...', style: TextStyle(fontSize: 16, color: Colors.grey[600])),
+              ],
+            ),
+          );
         },
       ),
     );

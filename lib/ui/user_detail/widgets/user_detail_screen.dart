@@ -4,6 +4,9 @@ import 'package:teste_bus2/core/app_status.dart';
 import 'package:teste_bus2/di/service_locator.dart';
 import 'package:teste_bus2/domain/models/user_entity.dart';
 import 'package:teste_bus2/ui/core/ui/default_cached_network_image.dart';
+import 'package:teste_bus2/ui/core/ui/info_row.dart';
+import 'package:teste_bus2/ui/core/ui/section_card.dart';
+import 'package:teste_bus2/ui/core/ui/themed_app_bar.dart';
 import 'package:teste_bus2/ui/user_detail/view_model/user_detail_cubit.dart';
 import 'package:teste_bus2/ui/user_detail/view_model/user_detail_state.dart';
 
@@ -34,15 +37,19 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         if (state.status == AppStatus.success) {
           ScaffoldMessenger.of(context).showSnackBar(
             state.isSaved
-                ? const SnackBar(
-                    content: Text('Usuário salvo com sucesso!'),
+                ? SnackBar(
+                    content: const Text('Usuário salvo com sucesso!'),
                     backgroundColor: Colors.green,
-                    duration: Duration(seconds: 2),
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    duration: const Duration(seconds: 2),
                   )
-                : const SnackBar(
-                    content: Text('Usuário removido com sucesso!'),
+                : SnackBar(
+                    content: const Text('Usuário removido com sucesso!'),
                     backgroundColor: Colors.orange,
-                    duration: Duration(seconds: 2),
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    duration: const Duration(seconds: 2),
                   ),
           );
         }
@@ -52,17 +59,17 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             SnackBar(
               content: Text(state.errorMessage ?? 'Erro desconhecido'),
               backgroundColor: Colors.red,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               duration: const Duration(seconds: 2),
             ),
           );
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('${widget.user.name.first} ${widget.user.name.last}'),
-          backgroundColor: Colors.white,
-          elevation: 2,
-          shadowColor: Colors.black,
+        backgroundColor: Colors.grey.shade50,
+        appBar: ThemedAppBar(
+          title: '${widget.user.name.first} ${widget.user.name.last}',
           actions: [
             BlocBuilder<UserDetailCubit, UserDetailState>(
               bloc: userDetailCubit,
@@ -73,7 +80,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                     child: SizedBox(
                       width: 24,
                       height: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.grey),
+                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                     ),
                   );
                 }
@@ -82,10 +89,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                   onPressed: () {
                     userDetailCubit.toggleUserPersistence(widget.user);
                   },
-                  icon: Icon(
-                    state.isSaved ? Icons.favorite : Icons.favorite_border,
-                    color: state.isSaved ? Colors.red : Colors.grey,
-                  ),
+                  icon: Icon(state.isSaved ? Icons.favorite : Icons.favorite_border, color: Colors.white),
                 );
               },
             ),
@@ -97,96 +101,127 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
               // Header com foto
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(24),
-                color: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 32),
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF5E72E4), Color(0xFF825EE4)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
                 child: Column(
                   children: [
-                    CircleAvatar(
-                      radius: 60,
-                      backgroundColor: Colors.grey[300],
-                      child: DefaultCachedNetworkImage(imageUrl: widget.user.picture.large, size: 120),
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 20,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: CircleAvatar(
+                        radius: 70,
+                        backgroundColor: Colors.white,
+                        child: CircleAvatar(
+                          radius: 66,
+                          backgroundColor: Colors.grey[300],
+                          child: DefaultCachedNetworkImage(imageUrl: widget.user.picture.large, size: 132),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               // Informações Pessoais
-              _buildSection(
+              SectionCard(
                 title: 'Informações Pessoais',
-                items: [
-                  _buildInfoRow(
-                    'Nome Completo:',
-                    '${widget.user.name.title} ${widget.user.name.first} ${widget.user.name.last}',
+                icon: Icons.person_outline,
+                children: [
+                  InfoRow(
+                    label: 'Nome Completo:',
+                    value: '${widget.user.name.title} ${widget.user.name.first} ${widget.user.name.last}',
                   ),
-                  _buildInfoRow('Idade:', '${widget.user.dob.age} anos'),
-                  _buildInfoRow('Gênero:', _formatGender(widget.user.gender)),
+                  InfoRow(label: 'Idade:', value: '${widget.user.dob.age} anos'),
+                  InfoRow(label: 'Gênero:', value: _formatGender(widget.user.gender)),
                 ],
               ),
-              const SizedBox(height: 8),
               // Localização
-              _buildSection(
+              SectionCard(
                 title: 'Localização',
-                items: [
-                  _buildInfoRow('País:', widget.user.location.country),
-                  _buildInfoRow('Estado:', widget.user.location.state),
-                  _buildInfoRow('Cidade:', widget.user.location.city),
-                  _buildInfoRow('Rua:', '${widget.user.location.street.name}, ${widget.user.location.street.number}'),
-                  _buildInfoRow('CEP:', widget.user.location.postcode),
-                  _buildInfoRow(
-                    'Coordenadas:',
-                    '${widget.user.location.coordinates.latitude}, ${widget.user.location.coordinates.longitude}',
+                icon: Icons.location_on_outlined,
+                children: [
+                  InfoRow(label: 'País:', value: widget.user.location.country),
+                  InfoRow(label: 'Estado:', value: widget.user.location.state),
+                  InfoRow(label: 'Cidade:', value: widget.user.location.city),
+                  InfoRow(
+                    label: 'Rua:',
+                    value: '${widget.user.location.street.name}, ${widget.user.location.street.number}',
                   ),
-                  _buildInfoRow(
-                    'Fuso Horário:',
-                    '${widget.user.location.timezone.offset} - ${widget.user.location.timezone.description}',
+                  InfoRow(label: 'CEP:', value: widget.user.location.postcode),
+                  InfoRow(
+                    label: 'Coordenadas:',
+                    value:
+                        '${widget.user.location.coordinates.latitude}, ${widget.user.location.coordinates.longitude}',
+                  ),
+                  InfoRow(
+                    label: 'Fuso Horário:',
+                    value: '${widget.user.location.timezone.offset} - ${widget.user.location.timezone.description}',
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
               // Contato
-              _buildSection(
+              SectionCard(
                 title: 'Contato',
-                items: [
-                  _buildInfoRow('Email:', widget.user.email),
-                  _buildInfoRow('Telefone:', widget.user.phone),
-                  _buildInfoRow('Celular:', widget.user.cell),
+                icon: Icons.contact_mail_outlined,
+                children: [
+                  InfoRow(label: 'Email:', value: widget.user.email),
+                  InfoRow(label: 'Telefone:', value: widget.user.phone),
+                  InfoRow(label: 'Celular:', value: widget.user.cell),
                 ],
               ),
-              const SizedBox(height: 8),
               // Login
-              _buildSection(
+              SectionCard(
                 title: 'Login',
-                items: [
-                  _buildInfoRow('UUID:', widget.user.login.uuid),
-                  _buildInfoRow('Username:', widget.user.login.username),
-                  _buildInfoRow('Password:', widget.user.login.password),
-                  _buildInfoRow('Salt:', widget.user.login.salt),
-                  _buildInfoRow('MD5:', widget.user.login.md5),
-                  _buildInfoRow('SHA1:', widget.user.login.sha1),
-                  _buildInfoRow('SHA256:', widget.user.login.sha256),
+                icon: Icons.lock_outline,
+                children: [
+                  InfoRow(label: 'UUID:', value: widget.user.login.uuid),
+                  InfoRow(label: 'Username:', value: widget.user.login.username),
+                  InfoRow(label: 'Password:', value: widget.user.login.password),
+                  InfoRow(label: 'Salt:', value: widget.user.login.salt),
+                  InfoRow(label: 'MD5:', value: widget.user.login.md5),
+                  InfoRow(label: 'SHA1:', value: widget.user.login.sha1),
+                  InfoRow(label: 'SHA256:', value: widget.user.login.sha256),
                 ],
               ),
-              const SizedBox(height: 8),
               // Documentos
               if (widget.user.id.name.isNotEmpty && widget.user.id.value.isNotEmpty)
-                _buildSection(
+                SectionCard(
                   title: 'Documentos',
-                  items: [_buildInfoRow('${widget.user.id.name}:', widget.user.id.value)],
+                  icon: Icons.badge_outlined,
+                  children: [InfoRow(label: '${widget.user.id.name}:', value: widget.user.id.value)],
                 ),
-              if (widget.user.id.name.isNotEmpty && widget.user.id.value.isNotEmpty) const SizedBox(height: 8),
               // Datas
-              _buildSection(
+              SectionCard(
                 title: 'Datas',
-                items: [
-                  _buildInfoRow('Data de Nascimento:', _formatDate(widget.user.dob.date)),
-                  _buildInfoRow('Data de Registro:', _formatDate(widget.user.registered.date)),
-                  _buildInfoRow('Tempo de Registro:', '${widget.user.registered.age} anos'),
+                icon: Icons.calendar_today_outlined,
+                children: [
+                  InfoRow(label: 'Data de Nascimento:', value: _formatDate(widget.user.dob.date)),
+                  InfoRow(label: 'Data de Registro:', value: _formatDate(widget.user.registered.date)),
+                  InfoRow(label: 'Tempo de Registro:', value: '${widget.user.registered.age} anos'),
                 ],
               ),
-              const SizedBox(height: 8),
               // Outras Informações
-              _buildSection(title: 'Outras Informações', items: [_buildInfoRow('Nacionalidade:', widget.user.nat)]),
-              const SizedBox(height: 24),
+              SectionCard(
+                title: 'Outras Informações',
+                icon: Icons.info_outline,
+                children: [InfoRow(label: 'Nacionalidade:', value: widget.user.nat)],
+              ),
+              const SizedBox(height: 32),
             ],
           ),
         ),
@@ -207,50 +242,5 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     } catch (e) {
       return dateString.split('T')[0];
     }
-  }
-
-  Widget _buildSection({required String title, required List<Widget> items}) {
-    return Container(
-      width: double.infinity,
-      color: Colors.white,
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
-          ),
-          const Divider(height: 24, thickness: 1),
-          ...items,
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 2,
-            child: Text(
-              label,
-              style: TextStyle(fontSize: 14, color: Colors.grey[600], fontWeight: FontWeight.w500),
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Text(
-              value,
-              style: const TextStyle(fontSize: 14, color: Colors.black87),
-              textAlign: TextAlign.right,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste_bus2/core/app_status.dart';
 import 'package:teste_bus2/di/service_locator.dart';
+import 'package:teste_bus2/ui/core/ui/empty_state_widget.dart';
+import 'package:teste_bus2/ui/core/ui/error_state_widget.dart';
+import 'package:teste_bus2/ui/core/ui/themed_app_bar.dart';
 import 'package:teste_bus2/ui/core/ui/user_item.dart';
 import 'package:teste_bus2/ui/saved_users/view_model/saved_users_cubit.dart';
 import 'package:teste_bus2/ui/saved_users/view_model/saved_users_state.dart';
@@ -35,13 +38,24 @@ class _SavedUsersScreenState extends State<SavedUsersScreen> {
     await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Remover Usuário'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('Remover Usuário', style: TextStyle(fontWeight: FontWeight.w600)),
         content: Text('Deseja remover ${user.name.first} ${user.name.last} dos salvos?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
           TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            style: TextButton.styleFrom(foregroundColor: Colors.grey[700]),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Remover', style: TextStyle(color: Colors.red)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              elevation: 0,
+            ),
+            child: const Text('Remover'),
           ),
         ],
       ),
@@ -52,6 +66,9 @@ class _SavedUsersScreenState extends State<SavedUsersScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${user.name.first} ${user.name.last} removido'),
+              backgroundColor: Colors.orange,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               duration: const Duration(seconds: 2),
             ),
           );
@@ -63,66 +80,44 @@ class _SavedUsersScreenState extends State<SavedUsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: BlocBuilder<SavedUsersCubit, SavedUsersState>(
-          bloc: savedUsersCubit,
-          builder: (context, state) {
-            return Text(
-              'Usuários Salvos (${state.totalUsers})',
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
-            );
-          },
-        ),
-        centerTitle: false,
-        elevation: 2,
-        backgroundColor: Colors.white,
-        shadowColor: Colors.black,
-      ),
+      backgroundColor: Colors.grey.shade50,
+      appBar: ThemedAppBar(title: 'Usuários Salvos (${savedUsersCubit.state.totalUsers})'),
       body: BlocBuilder<SavedUsersCubit, SavedUsersState>(
         bloc: savedUsersCubit,
         builder: (context, state) {
           if (state.status == AppStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state.status == AppStatus.error) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                  const SizedBox(height: 16),
-                  Text(state.errorMessage, style: const TextStyle(fontSize: 16), textAlign: TextAlign.center),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => savedUsersCubit.loadSavedUsers(),
-                    child: const Text('Tentar Novamente'),
-                  ),
-                ],
-              ),
+            return const Center(
+              child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF5E72E4))),
             );
           }
 
+          if (state.status == AppStatus.error) {
+            return ErrorStateWidget(errorMessage: state.errorMessage, onRetry: () => savedUsersCubit.loadSavedUsers());
+          }
+
           if (state.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.favorite_border, size: 64, color: Colors.grey[400]),
-                  const SizedBox(height: 16),
-                  Text('Nenhum usuário salvo ainda', style: TextStyle(fontSize: 18, color: Colors.grey[600])),
-                  const SizedBox(height: 8),
-                  Text('Favorite usuários na tela principal', style: TextStyle(fontSize: 14, color: Colors.grey[500])),
-                ],
-              ),
+            return EmptyStateWidget(
+              icon: Icons.favorite_border,
+              title: 'Nenhum usuário salvo ainda',
+              subtitle: 'Favorite usuários na tela principal',
+              iconBackgroundColor: Colors.purple.shade50,
+              iconColor: const Color(0xFF5E72E4),
             );
           }
 
           return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             itemCount: state.users.length,
             itemBuilder: (context, index) {
               final user = state.users[index];
-              return UserItem(user: user, onTap: () => _navigateToDetail(index), onDelete: () => _confirmDelete(index));
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: UserItem(
+                  user: user,
+                  onTap: () => _navigateToDetail(index),
+                  onDelete: () => _confirmDelete(index),
+                ),
+              );
             },
           );
         },

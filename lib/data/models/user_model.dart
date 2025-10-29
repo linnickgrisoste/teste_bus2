@@ -57,23 +57,6 @@ class UserModel extends UserEntity {
     );
   }
 
-  UserEntity toEntity() {
-    return UserEntity(
-      gender: gender,
-      name: name,
-      location: location,
-      email: email,
-      login: login,
-      dob: dob,
-      registered: registered,
-      phone: phone,
-      cell: cell,
-      id: id,
-      picture: picture,
-      nat: nat,
-    );
-  }
-
   Map<String, dynamic> toJson() {
     return {
       'gender': gender,

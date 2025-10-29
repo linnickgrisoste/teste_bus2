@@ -6,10 +6,10 @@ import 'package:teste_bus2/domain/models/user_entity.dart';
 
 abstract class UserRepositoryProtocol {
   void getUser({required Success success, required Failure failure});
-  Future<bool> saveLocalUser(UserEntity user);
+  Future<bool> saveLocalUser(UserModel user);
   Future<bool> isLocalUserSaved(String email);
   Future<bool> deleteLocalUser(String email);
-  Future<List<UserEntity>> getAllLocalUsers();
+  Future<List<UserModel>> getAllLocalUsers();
 }
 
 class UserRepository extends UserRepositoryProtocol {
@@ -25,8 +25,7 @@ class UserRepository extends UserRepositoryProtocol {
       success: (response) {
         try {
           final userModel = UserModel.fromMap(response['results'][0]);
-          final userEntity = userModel.toEntity();
-          success.call(userEntity);
+          success.call(userModel);
         } on Exception catch (error) {
           failure.call(error);
         }
@@ -68,10 +67,9 @@ class UserRepository extends UserRepositoryProtocol {
   }
 
   @override
-  Future<List<UserEntity>> getAllLocalUsers() async {
+  Future<List<UserModel>> getAllLocalUsers() async {
     try {
-      final userModels = await localUserService.getAllSavedUsers();
-      return userModels.map((model) => model.toEntity()).toList();
+      return await localUserService.getAllSavedUsers();
     } catch (e) {
       return [];
     }
