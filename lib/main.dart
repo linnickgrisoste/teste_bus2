@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:teste_bus2/data/services/setup/database_provider.dart';
-import 'package:teste_bus2/presentation/views/home/home_screen.dart';
-import 'package:teste_bus2/support/service_locator/service_locator.dart';
+import 'package:teste_bus2/di/service_locator.dart';
+import 'package:teste_bus2/ui/home/widgets/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

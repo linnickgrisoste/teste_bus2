@@ -1,4 +1,4 @@
-import 'package:teste_bus2/models/registered_entity.dart';
+import 'package:teste_bus2/domain/models/registered_entity.dart';
 
 class RegisteredModel extends RegisteredEntity {
   RegisteredModel({required super.date, required super.age});

@@ -1,4 +1,4 @@
-import 'package:teste_bus2/models/street_entity.dart';
+import 'package:teste_bus2/domain/models/street_entity.dart';
 
 class StreetModel extends StreetEntity {
   StreetModel({required super.number, required super.name});

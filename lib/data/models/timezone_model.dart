@@ -1,4 +1,4 @@
-import 'package:teste_bus2/models/timezone_entity.dart';
+import 'package:teste_bus2/domain/models/timezone_entity.dart';
 
 class TimezoneModel extends TimezoneEntity {
   TimezoneModel({required super.offset, required super.description});

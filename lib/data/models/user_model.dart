@@ -5,7 +5,7 @@ import 'package:teste_bus2/data/models/login_model.dart';
 import 'package:teste_bus2/data/models/name_model.dart';
 import 'package:teste_bus2/data/models/picture_model.dart';
 import 'package:teste_bus2/data/models/registered_model.dart';
-import 'package:teste_bus2/models/user_entity.dart';
+import 'package:teste_bus2/domain/models/user_entity.dart';
 
 class UserModel extends UserEntity {
   UserModel({
@@ -54,6 +54,23 @@ class UserModel extends UserEntity {
       id: entity.id,
       picture: entity.picture,
       nat: entity.nat,
+    );
+  }
+
+  UserEntity toEntity() {
+    return UserEntity(
+      gender: gender,
+      name: name,
+      location: location,
+      email: email,
+      login: login,
+      dob: dob,
+      registered: registered,
+      phone: phone,
+      cell: cell,
+      id: id,
+      picture: picture,
+      nat: nat,
     );
   }
 

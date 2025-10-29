@@ -1,4 +1,4 @@
-import 'package:teste_bus2/models/login_entity.dart';
+import 'package:teste_bus2/domain/models/login_entity.dart';
 
 class LoginModel extends LoginEntity {
   LoginModel({

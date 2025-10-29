@@ -1,4 +1,4 @@
-import 'package:teste_bus2/models/id_entity.dart';
+import 'package:teste_bus2/domain/models/id_entity.dart';
 
 class IdModel extends IdEntity {
   IdModel({required super.name, required super.value});

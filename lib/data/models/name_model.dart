@@ -1,4 +1,4 @@
-import 'package:teste_bus2/models/name_entity.dart';
+import 'package:teste_bus2/domain/models/name_entity.dart';
 
 class NameModel extends NameEntity {
   NameModel({required super.title, required super.first, required super.last});

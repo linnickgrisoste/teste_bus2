@@ -1,4 +1,4 @@
-import 'package:teste_bus2/models/coordinates_entity.dart';
+import 'package:teste_bus2/domain/models/coordinates_entity.dart';
 
 class CoordinatesModel extends CoordinatesEntity {
   CoordinatesModel({required super.latitude, required super.longitude});

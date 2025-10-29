@@ -2,8 +2,8 @@ import 'package:teste_bus2/data/repositories/user_repository.dart';
 import 'package:teste_bus2/data/services/local_user_service.dart';
 import 'package:teste_bus2/data/services/setup/database_provider.dart';
 import 'package:teste_bus2/data/services/user_service.dart';
-import 'package:teste_bus2/support/service_locator/app_module.dart';
-import 'package:teste_bus2/support/service_locator/service_locator.dart';
+import 'package:teste_bus2/di/app_module.dart';
+import 'package:teste_bus2/di/service_locator.dart';
 
 class DataModule implements AppModule {
   @override

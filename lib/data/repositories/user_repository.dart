@@ -2,14 +2,14 @@ import 'package:teste_bus2/data/models/user_model.dart';
 import 'package:teste_bus2/data/services/local_user_service.dart';
 import 'package:teste_bus2/data/services/setup/api_provider.dart';
 import 'package:teste_bus2/data/services/user_service.dart';
-import 'package:teste_bus2/models/user_entity.dart';
+import 'package:teste_bus2/domain/models/user_entity.dart';
 
 abstract class UserRepositoryProtocol {
   void getUser({required Success success, required Failure failure});
-  Future<bool> saveLocalUser(UserModel user);
+  Future<bool> saveLocalUser(UserEntity user);
   Future<bool> isLocalUserSaved(String email);
   Future<bool> deleteLocalUser(String email);
-  Future<List<UserModel>> getAllLocalUsers();
+  Future<List<UserEntity>> getAllLocalUsers();
 }
 
 class UserRepository extends UserRepositoryProtocol {
@@ -24,8 +24,9 @@ class UserRepository extends UserRepositoryProtocol {
     userService.getUser(
       success: (response) {
         try {
-          final user = UserModel.fromMap(response['results'][0]);
-          success.call(user);
+          final userModel = UserModel.fromMap(response['results'][0]);
+          final userEntity = userModel.toEntity();
+          success.call(userEntity);
         } on Exception catch (error) {
           failure.call(error);
         }
@@ -67,9 +68,10 @@ class UserRepository extends UserRepositoryProtocol {
   }
 
   @override
-  Future<List<UserModel>> getAllLocalUsers() async {
+  Future<List<UserEntity>> getAllLocalUsers() async {
     try {
-      return await localUserService.getAllSavedUsers();
+      final userModels = await localUserService.getAllSavedUsers();
+      return userModels.map((model) => model.toEntity()).toList();
     } catch (e) {
       return [];
     }

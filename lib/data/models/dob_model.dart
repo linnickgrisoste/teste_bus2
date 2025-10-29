@@ -1,4 +1,4 @@
-import 'package:teste_bus2/models/dob_entity.dart';
+import 'package:teste_bus2/domain/models/dob_entity.dart';
 
 class DobModel extends DobEntity {
   DobModel({required super.date, required super.age});

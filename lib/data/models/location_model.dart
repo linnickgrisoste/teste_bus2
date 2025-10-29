@@ -1,7 +1,7 @@
 import 'package:teste_bus2/data/models/coordinates_model.dart';
 import 'package:teste_bus2/data/models/street_model.dart';
 import 'package:teste_bus2/data/models/timezone_model.dart';
-import 'package:teste_bus2/models/location_entity.dart';
+import 'package:teste_bus2/domain/models/location_entity.dart';
 
 class LocationModel extends LocationEntity {
   LocationModel({
