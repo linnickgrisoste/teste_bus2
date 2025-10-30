@@ -38,6 +38,7 @@ dev_dependencies:
   # Testing
   bloc_test: ^9.1.7
   mocktail: ^1.0.4
+  sqflite_common_ffi: ^2.3.0
 
 flutter:
   uses-material-design: true
