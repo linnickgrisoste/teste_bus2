@@ -3,13 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:teste_bus2/ui/core/ui/default_app_bar.dart';
 
 void main() {
-  group('ThemedAppBar -', () {
+  group('DefaultAppBar -', () {
     testWidgets('deve_renderizar_titulo_corretamente', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(appBar: DefaultAppBar(title: 'Teste')),
         ),
       );
+      await tester.pumpAndSettle(const Duration(milliseconds: 600));
 
       expect(find.text('Teste'), findsOneWidget);
     });
@@ -20,6 +21,7 @@ void main() {
           home: Scaffold(appBar: DefaultAppBar(title: 'Teste')),
         ),
       );
+      await tester.pumpAndSettle(const Duration(milliseconds: 600));
 
       final container = tester.widget<Container>(
         find.descendant(of: find.byType(DefaultAppBar), matching: find.byType(Container)),
@@ -42,6 +44,7 @@ void main() {
           ),
         ),
       );
+      await tester.pumpAndSettle(const Duration(milliseconds: 600));
 
       expect(find.byIcon(Icons.search), findsOneWidget);
     });
@@ -52,15 +55,16 @@ void main() {
           home: Scaffold(appBar: DefaultAppBar(title: 'Teste', centerTitle: true)),
         ),
       );
+      await tester.pumpAndSettle(const Duration(milliseconds: 600));
 
       final appBar = tester.widget<AppBar>(find.byType(AppBar));
       expect(appBar.centerTitle, isTrue);
     });
 
     testWidgets('deve_ter_altura_padrao_de_toolbar', (tester) async {
-      const themedAppBar = DefaultAppBar(title: 'Teste');
+      const defaultAppBar = DefaultAppBar(title: 'Teste');
 
-      expect(themedAppBar.preferredSize.height, kToolbarHeight);
+      expect(defaultAppBar.preferredSize.height, kToolbarHeight);
     });
   });
 }

@@ -7,6 +7,7 @@ import 'package:teste_bus2/ui/core/styles/app_fonts.dart';
 import 'package:teste_bus2/ui/core/ui/default_app_bar.dart';
 import 'package:teste_bus2/ui/core/ui/empty_state_widget.dart';
 import 'package:teste_bus2/ui/core/ui/error_state_widget.dart';
+import 'package:teste_bus2/ui/core/ui/fade_slide_in.dart';
 import 'package:teste_bus2/ui/core/ui/user_item.dart';
 import 'package:teste_bus2/ui/home/view_model/home_cubit.dart';
 import 'package:teste_bus2/ui/home/view_model/home_state.dart';
@@ -69,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             }
 
             return ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
               itemCount: users.length,
               itemBuilder: (context, index) {
                 final user = users[index];
@@ -77,20 +78,28 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(bottom: 12),
-                      child: UserItem(
-                        user: user,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => UserDetailScreen(user: user)),
-                          );
-                        },
+                      child: FadeSlideIn(
+                        enabled: true,
+                        beginOffsetY: 0.2,
+                        curve: Curves.easeOutCubic,
+                        delay: const Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 300),
+                        child: UserItem(
+                          user: user,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => UserDetailScreen(user: user)),
+                            );
+                          },
+                        ),
                       ),
                     ),
                     if (state.isLoading && index == users.length - 1)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: LinearProgressIndicator(color: AppColors.primary, backgroundColor: AppColors.grey200),
+                      LinearProgressIndicator(
+                        color: AppColors.primary,
+                        backgroundColor: AppColors.grey200,
+                        borderRadius: BorderRadius.circular(32),
                       ),
                   ],
                 );

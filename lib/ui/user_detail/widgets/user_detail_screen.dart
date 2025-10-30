@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste_bus2/core/app_status.dart';
 import 'package:teste_bus2/di/service_locator.dart';
@@ -7,6 +8,7 @@ import 'package:teste_bus2/ui/core/styles/app_colors.dart';
 import 'package:teste_bus2/ui/core/styles/app_fonts.dart';
 import 'package:teste_bus2/ui/core/ui/default_app_bar.dart';
 import 'package:teste_bus2/ui/core/ui/default_cached_network_image.dart';
+import 'package:teste_bus2/ui/core/ui/fade_slide_in.dart';
 import 'package:teste_bus2/ui/core/ui/info_row.dart';
 import 'package:teste_bus2/ui/core/ui/section_card.dart';
 import 'package:teste_bus2/ui/user_detail/view_model/user_detail_cubit.dart';
@@ -88,11 +90,20 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                   );
                 }
 
-                return IconButton(
-                  onPressed: () {
-                    userDetailCubit.toggleUserPersistence(widget.user);
-                  },
-                  icon: Icon(state.isSaved ? Icons.favorite : Icons.favorite_border, color: AppColors.white),
+                return Animate(
+                  key: ValueKey(state.isSaved),
+                  onPlay: (controller) => state.isSaved ? controller.repeat(reverse: true) : controller.stop(),
+                  child: IconButton(
+                    onPressed: () {
+                      userDetailCubit.toggleUserPersistence(widget.user);
+                    },
+                    icon: Icon(state.isSaved ? Icons.favorite : Icons.favorite_border, color: AppColors.white),
+                  ),
+                ).scale(
+                  begin: const Offset(1, 1),
+                  end: const Offset(1.08, 1.08),
+                  duration: const Duration(milliseconds: 600),
+                  curve: Curves.easeInOut,
                 );
               },
             ),
@@ -108,22 +119,13 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                 decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
                 child: Column(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(color: AppColors.shadowMedium, blurRadius: 20, offset: const Offset(0, 4)),
-                        ],
-                      ),
+                    CircleAvatar(
+                      radius: 70,
+                      backgroundColor: AppColors.white,
                       child: CircleAvatar(
-                        radius: 70,
-                        backgroundColor: AppColors.white,
-                        child: CircleAvatar(
-                          radius: 66,
-                          backgroundColor: AppColors.grey200,
-                          child: DefaultCachedNetworkImage(imageUrl: widget.user.picture.large, size: 132),
-                        ),
+                        radius: 66,
+                        backgroundColor: AppColors.grey200,
+                        child: DefaultCachedNetworkImage(imageUrl: widget.user.picture.large, size: 132),
                       ),
                     ),
                   ],
@@ -131,41 +133,55 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
               ),
               const SizedBox(height: 16),
               // Informações Pessoais
-              SectionCard(
-                title: 'Informações Pessoais',
-                icon: Icons.person_outline,
-                children: [
-                  InfoRow(
-                    label: 'Nome Completo:',
-                    value: '${widget.user.name.title} ${widget.user.name.first} ${widget.user.name.last}',
-                  ),
-                  InfoRow(label: 'Idade:', value: '${widget.user.dob.age} anos'),
-                  InfoRow(label: 'Gênero:', value: widget.user.gender.formattedGender),
-                ],
+              FadeSlideIn(
+                enabled: true,
+                beginOffsetY: 0.2,
+                curve: Curves.easeOutCubic,
+                delay: const Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 300),
+                child: SectionCard(
+                  title: 'Informações Pessoais',
+                  icon: Icons.person_outline,
+                  children: [
+                    InfoRow(
+                      label: 'Nome Completo:',
+                      value: '${widget.user.name.title} ${widget.user.name.first} ${widget.user.name.last}',
+                    ),
+                    InfoRow(label: 'Idade:', value: '${widget.user.dob.age} anos'),
+                    InfoRow(label: 'Gênero:', value: widget.user.gender.formattedGender),
+                  ],
+                ),
               ),
               // Localização
-              SectionCard(
-                title: 'Localização',
-                icon: Icons.location_on_outlined,
-                children: [
-                  InfoRow(label: 'País:', value: widget.user.location.country),
-                  InfoRow(label: 'Estado:', value: widget.user.location.state),
-                  InfoRow(label: 'Cidade:', value: widget.user.location.city),
-                  InfoRow(
-                    label: 'Rua:',
-                    value: '${widget.user.location.street.name}, ${widget.user.location.street.number}',
-                  ),
-                  InfoRow(label: 'CEP:', value: widget.user.location.postcode),
-                  InfoRow(
-                    label: 'Coordenadas:',
-                    value:
-                        '${widget.user.location.coordinates.latitude}, ${widget.user.location.coordinates.longitude}',
-                  ),
-                  InfoRow(
-                    label: 'Fuso Horário:',
-                    value: '${widget.user.location.timezone.offset} - ${widget.user.location.timezone.description}',
-                  ),
-                ],
+              FadeSlideIn(
+                enabled: true,
+                beginOffsetY: 0.2,
+                curve: Curves.easeOutCubic,
+                delay: const Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 300),
+                child: SectionCard(
+                  title: 'Localização',
+                  icon: Icons.location_on_outlined,
+                  children: [
+                    InfoRow(label: 'País:', value: widget.user.location.country),
+                    InfoRow(label: 'Estado:', value: widget.user.location.state),
+                    InfoRow(label: 'Cidade:', value: widget.user.location.city),
+                    InfoRow(
+                      label: 'Rua:',
+                      value: '${widget.user.location.street.name}, ${widget.user.location.street.number}',
+                    ),
+                    InfoRow(label: 'CEP:', value: widget.user.location.postcode),
+                    InfoRow(
+                      label: 'Coordenadas:',
+                      value:
+                          '${widget.user.location.coordinates.latitude}, ${widget.user.location.coordinates.longitude}',
+                    ),
+                    InfoRow(
+                      label: 'Fuso Horário:',
+                      value: '${widget.user.location.timezone.offset} - ${widget.user.location.timezone.description}',
+                    ),
+                  ],
+                ),
               ),
               // Contato
               SectionCard(

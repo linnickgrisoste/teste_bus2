@@ -17,18 +17,18 @@ class DefaultCachedNetworkImage extends StatelessWidget {
 
     return CachedNetworkImage(
       imageUrl: imageUrl,
-      imageBuilder: (context, imageProvider) => Container(
+      imageBuilder: (_, imageProvider) => Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           image: DecorationImage(image: imageProvider, fit: fit),
         ),
       ),
-      placeholder: (context, url) => SizedBox(
+      placeholder: (_, url) => SizedBox(
         width: size,
         height: size,
         child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
       ),
-      errorWidget: (context, url, error) {
+      errorWidget: (_, url, error) {
         return _buildErrorWidget();
       },
       fadeInDuration: const Duration(milliseconds: 300),
