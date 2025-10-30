@@ -4,7 +4,7 @@ Aplicação Flutter desenvolvida como teste técnico, demonstrando habilidades e
 
 ## 📱 Funcionalidades
 
-- **Lista Dinâmica**: Carregamento automático de novos usuários a cada 3 segundos
+- **Lista Dinâmica**: Carregamento automático de novos usuários a cada 5 segundos
 - **Detalhes do Usuário**: Visualização completa de informações pessoais, localização e login
 - **Persistência Local**: Salvamento de usuários favoritos com SQLite
 - **Animações Fluidas**: Transições suaves e experiência visual refinada
@@ -23,7 +23,7 @@ Aplicação Flutter desenvolvida como teste técnico, demonstrando habilidades e
 
 ### Rede & Persistência
 - **dio 5.9.0** - Cliente HTTP
-- **sqflite 2.4.2** - Banco de dados local SQLite
+- **sqflite_common_ffi 2.3.0** - Banco de dados local SQLite
 - **pretty_dio_logger 1.4.0** - Logs de requisições
 
 ### UI & UX
