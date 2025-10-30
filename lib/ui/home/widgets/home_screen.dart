@@ -37,12 +37,19 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       appBar: DefaultAppBar(
         title: 'Pessoas',
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const SavedUsersScreen()));
-            },
-            icon: const Icon(Icons.bookmark_outline),
-            tooltip: 'Usuários Salvos',
+          FadeSlideIn(
+            enabled: true,
+            beginOffsetY: 0.2,
+            curve: Curves.easeOutCubic,
+            delay: const Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 300),
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SavedUsersScreen()));
+              },
+              icon: const Icon(Icons.storage),
+              tooltip: 'Usuários Salvos',
+            ),
           ),
         ],
       ),

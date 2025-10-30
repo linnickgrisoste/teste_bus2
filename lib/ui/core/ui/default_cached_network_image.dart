@@ -23,18 +23,15 @@ class DefaultCachedNetworkImage extends StatelessWidget {
           image: DecorationImage(image: imageProvider, fit: fit),
         ),
       ),
-      placeholder: (_, url) => SizedBox(
-        width: size,
-        height: size,
-        child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-      ),
-      errorWidget: (_, url, error) {
-        return _buildErrorWidget();
-      },
+      placeholder: (_, _) => _buildErrorWidget(),
+      errorWidget: (_, _, error) => _buildErrorWidget(),
       fadeInDuration: const Duration(milliseconds: 300),
       fadeOutDuration: const Duration(milliseconds: 100),
       maxHeightDiskCache: 500,
       maxWidthDiskCache: 500,
+      errorListener: (error) async {
+        await CachedNetworkImage.evictFromCache(imageUrl);
+      },
     );
   }
 

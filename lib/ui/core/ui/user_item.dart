@@ -20,9 +20,7 @@ class UserItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(color: AppColors.shadowLight, blurRadius: 8, offset: const Offset(0, 2)),
-          ],
+          boxShadow: [BoxShadow(color: AppColors.shadowLight, blurRadius: 8, offset: const Offset(0, 2))],
           border: Border.all(color: AppColors.border),
         ),
         child: Row(
@@ -37,10 +35,7 @@ class UserItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '${user.name.first} ${user.name.last}',
-                    style: AppFonts.medium(16, AppColors.textPrimary),
-                  ),
+                  Text('${user.name.first} ${user.name.last}', style: AppFonts.medium(16, AppColors.textPrimary)),
                   const SizedBox(height: 4),
                   Text('${user.dob.age} anos — ${user.nat}', style: AppFonts.regular(14, AppColors.textSecondary)),
                 ],
