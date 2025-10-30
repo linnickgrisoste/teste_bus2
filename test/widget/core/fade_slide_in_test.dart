@@ -38,10 +38,8 @@ void main() {
 
       final animate = tester.widget<Animate>(find.byType(Animate));
 
-      // verifica delay propagado para o Animate
       expect(animate.delay, delay);
 
-      // Garante que a animação completa sem exceções
       await tester.pump(delay);
       await tester.pump(duration);
       await tester.pumpAndSettle();

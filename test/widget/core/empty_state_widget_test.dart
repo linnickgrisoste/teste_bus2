@@ -8,10 +8,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: EmptyStateWidget(
-              icon: Icons.inbox,
-              title: 'Nenhum item encontrado',
-            ),
+            body: EmptyStateWidget(icon: Icons.inbox, title: 'Nenhum item encontrado'),
           ),
         ),
       );
@@ -24,11 +21,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: EmptyStateWidget(
-              icon: Icons.inbox,
-              title: 'Nenhum item',
-              subtitle: 'Adicione itens para começar',
-            ),
+            body: EmptyStateWidget(icon: Icons.inbox, title: 'Nenhum item', subtitle: 'Adicione itens para começar'),
           ),
         ),
       );
@@ -40,15 +33,11 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: EmptyStateWidget(
-              icon: Icons.inbox,
-              title: 'Nenhum item',
-            ),
+            body: EmptyStateWidget(icon: Icons.inbox, title: 'Nenhum item'),
           ),
         ),
       );
 
-      // Deve ter apenas 2 textos: o título
       expect(find.byType(Text), findsOneWidget);
     });
 
@@ -56,11 +45,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: EmptyStateWidget(
-              icon: Icons.inbox,
-              title: 'Teste',
-              iconColor: Colors.blue,
-            ),
+            body: EmptyStateWidget(icon: Icons.inbox, title: 'Teste', iconColor: Colors.blue),
           ),
         ),
       );
@@ -73,20 +58,13 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: EmptyStateWidget(
-              icon: Icons.inbox,
-              title: 'Teste',
-              iconBackgroundColor: Colors.red,
-            ),
+            body: EmptyStateWidget(icon: Icons.inbox, title: 'Teste', iconBackgroundColor: Colors.red),
           ),
         ),
       );
 
       final container = tester.widget<Container>(
-        find.descendant(
-          of: find.byType(EmptyStateWidget),
-          matching: find.byType(Container),
-        ),
+        find.descendant(of: find.byType(EmptyStateWidget), matching: find.byType(Container)),
       );
 
       final decoration = container.decoration as BoxDecoration;
@@ -97,15 +75,11 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: EmptyStateWidget(
-              icon: Icons.inbox,
-              title: 'Teste',
-            ),
+            body: EmptyStateWidget(icon: Icons.inbox, title: 'Teste'),
           ),
         ),
       );
 
-      // Verifica que o widget foi renderizado sem erros
       expect(find.byType(EmptyStateWidget), findsOneWidget);
     });
 
@@ -113,10 +87,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: EmptyStateWidget(
-              icon: Icons.inbox,
-              title: 'Teste',
-            ),
+            body: EmptyStateWidget(icon: Icons.inbox, title: 'Teste'),
           ),
         ),
       );
@@ -128,10 +99,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: EmptyStateWidget(
-              icon: Icons.inbox,
-              title: 'Teste',
-            ),
+            body: EmptyStateWidget(icon: Icons.inbox, title: 'Teste'),
           ),
         ),
       );
@@ -141,4 +109,3 @@ void main() {
     });
   });
 }
-
