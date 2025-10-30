@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:teste_bus2/domain/models/user_entity.dart';
+import 'package:teste_bus2/ui/core/styles/app_colors.dart';
+import 'package:teste_bus2/ui/core/styles/app_fonts.dart';
 import 'package:teste_bus2/ui/core/ui/default_cached_network_image.dart';
 
 class UserItem extends StatelessWidget {
@@ -16,18 +18,18 @@ class UserItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
-            BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
+            BoxShadow(color: AppColors.shadowLight, blurRadius: 8, offset: const Offset(0, 2)),
           ],
-          border: Border.all(color: Colors.grey.shade300),
+          border: Border.all(color: AppColors.border),
         ),
         child: Row(
           children: [
             CircleAvatar(
               radius: 28,
-              backgroundColor: Colors.grey[300],
+              backgroundColor: AppColors.grey200,
               child: DefaultCachedNetworkImage(imageUrl: user.picture.thumbnail, size: 56),
             ),
             const SizedBox(width: 16),
@@ -37,10 +39,10 @@ class UserItem extends StatelessWidget {
                 children: [
                   Text(
                     '${user.name.first} ${user.name.last}',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black87),
+                    style: AppFonts.medium(16, AppColors.textPrimary),
                   ),
                   const SizedBox(height: 4),
-                  Text('${user.dob.age} anos — ${user.nat}', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+                  Text('${user.dob.age} anos — ${user.nat}', style: AppFonts.regular(14, AppColors.textSecondary)),
                 ],
               ),
             ),
@@ -48,7 +50,7 @@ class UserItem extends StatelessWidget {
               IconButton(
                 onPressed: onDelete,
                 icon: const Icon(Icons.delete_outline),
-                color: Colors.red,
+                color: AppColors.error,
                 tooltip: 'Remover',
               ),
           ],

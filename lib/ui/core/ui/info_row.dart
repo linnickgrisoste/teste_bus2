@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:teste_bus2/ui/core/styles/app_colors.dart';
+import 'package:teste_bus2/ui/core/styles/app_fonts.dart';
 
 class InfoRow extends StatelessWidget {
   final String label;
@@ -17,7 +19,7 @@ class InfoRow extends StatelessWidget {
             flex: 2,
             child: Text(
               label,
-              style: TextStyle(fontSize: 13, color: Colors.grey[700], fontWeight: FontWeight.w500),
+              style: AppFonts.medium(13, AppColors.textSecondary),
             ),
           ),
           const SizedBox(width: 12),
@@ -25,7 +27,7 @@ class InfoRow extends StatelessWidget {
             flex: 3,
             child: Text(
               value,
-              style: const TextStyle(fontSize: 13, color: Colors.black87, fontWeight: FontWeight.w400),
+              style: AppFonts.regular(13, AppColors.textPrimary),
               textAlign: TextAlign.right,
             ),
           ),

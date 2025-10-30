@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:teste_bus2/data/services/setup/database_provider.dart';
 import 'package:teste_bus2/di/service_locator.dart';
-import 'package:teste_bus2/ui/home/widgets/home_screen.dart';
+import 'package:teste_bus2/routing/app_router.dart';
+import 'package:teste_bus2/ui/core/styles/app_themes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,8 +19,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
-      home: HomeScreen(),
+      theme: AppThemes.theme,
+      onGenerateRoute: AppRouter.generateRoute,
     );
   }
 }

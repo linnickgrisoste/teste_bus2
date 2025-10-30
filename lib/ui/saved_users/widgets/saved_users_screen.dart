@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste_bus2/core/app_status.dart';
 import 'package:teste_bus2/di/service_locator.dart';
+import 'package:teste_bus2/ui/core/styles/app_colors.dart';
+import 'package:teste_bus2/ui/core/styles/app_fonts.dart';
+import 'package:teste_bus2/ui/core/ui/default_app_bar.dart';
 import 'package:teste_bus2/ui/core/ui/empty_state_widget.dart';
 import 'package:teste_bus2/ui/core/ui/error_state_widget.dart';
-import 'package:teste_bus2/ui/core/ui/themed_app_bar.dart';
 import 'package:teste_bus2/ui/core/ui/user_item.dart';
 import 'package:teste_bus2/ui/saved_users/view_model/saved_users_cubit.dart';
 import 'package:teste_bus2/ui/saved_users/view_model/saved_users_state.dart';
@@ -39,23 +41,26 @@ class _SavedUsersScreenState extends State<SavedUsersScreen> {
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Remover Usuário', style: TextStyle(fontWeight: FontWeight.w600)),
-        content: Text('Deseja remover ${user.name.first} ${user.name.last} dos salvos?'),
+        title: Text('Remover Usuário', style: AppFonts.medium(18, AppColors.textPrimary)),
+        content: Text(
+          'Deseja remover ${user.name.first} ${user.name.last} dos salvos?',
+          style: AppFonts.regular(14, AppColors.textSecondary),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            style: TextButton.styleFrom(foregroundColor: Colors.grey[700]),
-            child: const Text('Cancelar'),
+            style: TextButton.styleFrom(foregroundColor: AppColors.textSecondary),
+            child: Text('Cancelar', style: AppFonts.medium(14, AppColors.textSecondary)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
+              backgroundColor: AppColors.error,
+              foregroundColor: AppColors.white,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               elevation: 0,
             ),
-            child: const Text('Remover'),
+            child: Text('Remover', style: AppFonts.medium(14, AppColors.white)),
           ),
         ],
       ),
@@ -65,8 +70,11 @@ class _SavedUsersScreenState extends State<SavedUsersScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('${user.name.first} ${user.name.last} removido'),
-              backgroundColor: Colors.orange,
+              content: Text(
+                '${user.name.first} ${user.name.last} removido',
+                style: AppFonts.regular(14, AppColors.white),
+              ),
+              backgroundColor: AppColors.warning,
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               duration: const Duration(seconds: 2),
@@ -80,14 +88,14 @@ class _SavedUsersScreenState extends State<SavedUsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
-      appBar: ThemedAppBar(title: 'Usuários Salvos (${savedUsersCubit.state.totalUsers})'),
+      backgroundColor: AppColors.background,
+      appBar: DefaultAppBar(title: 'Usuários Salvos (${savedUsersCubit.state.totalUsers})'),
       body: BlocBuilder<SavedUsersCubit, SavedUsersState>(
         bloc: savedUsersCubit,
         builder: (context, state) {
           if (state.status == AppStatus.loading) {
             return const Center(
-              child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF5E72E4))),
+              child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary)),
             );
           }
 
@@ -96,12 +104,12 @@ class _SavedUsersScreenState extends State<SavedUsersScreen> {
           }
 
           if (state.isEmpty) {
-            return EmptyStateWidget(
+            return const EmptyStateWidget(
               icon: Icons.favorite_border,
               title: 'Nenhum usuário salvo ainda',
               subtitle: 'Favorite usuários na tela principal',
-              iconBackgroundColor: Colors.purple.shade50,
-              iconColor: const Color(0xFF5E72E4),
+              iconBackgroundColor: AppColors.softWhite,
+              iconColor: AppColors.primary,
             );
           }
 

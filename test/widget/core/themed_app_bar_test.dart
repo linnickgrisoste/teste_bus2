@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:teste_bus2/ui/core/ui/themed_app_bar.dart';
+import 'package:teste_bus2/ui/core/ui/default_app_bar.dart';
 
 void main() {
   group('ThemedAppBar -', () {
     testWidgets('deve_renderizar_titulo_corretamente', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            appBar: ThemedAppBar(title: 'Teste'),
-          ),
+          home: Scaffold(appBar: DefaultAppBar(title: 'Teste')),
         ),
       );
 
@@ -19,17 +17,12 @@ void main() {
     testWidgets('deve_aplicar_gradiente_roxo_azul', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            appBar: ThemedAppBar(title: 'Teste'),
-          ),
+          home: Scaffold(appBar: DefaultAppBar(title: 'Teste')),
         ),
       );
 
       final container = tester.widget<Container>(
-        find.descendant(
-          of: find.byType(ThemedAppBar),
-          matching: find.byType(Container),
-        ),
+        find.descendant(of: find.byType(DefaultAppBar), matching: find.byType(Container)),
       );
 
       final decoration = container.decoration as BoxDecoration;
@@ -42,11 +35,9 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            appBar: ThemedAppBar(
+            appBar: DefaultAppBar(
               title: 'Teste',
-              actions: [
-                IconButton(icon: const Icon(Icons.search), onPressed: () {}),
-              ],
+              actions: [IconButton(icon: const Icon(Icons.search), onPressed: () {})],
             ),
           ),
         ),
@@ -58,9 +49,7 @@ void main() {
     testWidgets('deve_centralizar_titulo_quando_centerTitle_true', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            appBar: ThemedAppBar(title: 'Teste', centerTitle: true),
-          ),
+          home: Scaffold(appBar: DefaultAppBar(title: 'Teste', centerTitle: true)),
         ),
       );
 
@@ -69,10 +58,9 @@ void main() {
     });
 
     testWidgets('deve_ter_altura_padrao_de_toolbar', (tester) async {
-      const themedAppBar = ThemedAppBar(title: 'Teste');
+      const themedAppBar = DefaultAppBar(title: 'Teste');
 
       expect(themedAppBar.preferredSize.height, kToolbarHeight);
     });
   });
 }
-

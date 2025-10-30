@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:teste_bus2/ui/core/styles/app_colors.dart';
+import 'package:teste_bus2/ui/core/styles/app_fonts.dart';
 
 class EmptyStateWidget extends StatelessWidget {
   final IconData icon;
@@ -18,8 +20,8 @@ class EmptyStateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = iconBackgroundColor ?? Colors.grey.shade100;
-    final icColor = iconColor ?? Colors.grey[400]!;
+    final bgColor = iconBackgroundColor ?? AppColors.grey200;
+    final icColor = iconColor ?? AppColors.textHint;
 
     return Center(
       child: Column(
@@ -31,18 +33,10 @@ class EmptyStateWidget extends StatelessWidget {
             child: Icon(icon, size: 64, color: icColor),
           ),
           const SizedBox(height: 24),
-          Text(
-            title,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.grey[700]),
-            textAlign: TextAlign.center,
-          ),
+          Text(title, style: AppFonts.medium(18, AppColors.textSecondary), textAlign: TextAlign.center),
           if (subtitle != null) ...[
             const SizedBox(height: 8),
-            Text(
-              subtitle!,
-              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
-              textAlign: TextAlign.center,
-            ),
+            Text(subtitle ?? '', style: AppFonts.regular(14, AppColors.textTertiary), textAlign: TextAlign.center),
           ],
         ],
       ),

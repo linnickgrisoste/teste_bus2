@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste_bus2/core/app_status.dart';
 import 'package:teste_bus2/di/service_locator.dart';
+import 'package:teste_bus2/ui/core/styles/app_colors.dart';
+import 'package:teste_bus2/ui/core/styles/app_fonts.dart';
+import 'package:teste_bus2/ui/core/ui/default_app_bar.dart';
 import 'package:teste_bus2/ui/core/ui/empty_state_widget.dart';
 import 'package:teste_bus2/ui/core/ui/error_state_widget.dart';
-import 'package:teste_bus2/ui/core/ui/themed_app_bar.dart';
 import 'package:teste_bus2/ui/core/ui/user_item.dart';
 import 'package:teste_bus2/ui/home/view_model/home_cubit.dart';
 import 'package:teste_bus2/ui/home/view_model/home_state.dart';
@@ -30,8 +32,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
-      appBar: ThemedAppBar(
+      backgroundColor: AppColors.background,
+      appBar: DefaultAppBar(
         title: 'Pessoas',
         actions: [
           IconButton(
@@ -48,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         builder: (context, state) {
           if (state.status == AppStatus.loading && state.users.isEmpty) {
             return const Center(
-              child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF5E72E4))),
+              child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary)),
             );
           }
 
@@ -88,10 +90,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     if (state.isLoading && index == users.length - 1)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: LinearProgressIndicator(
-                          color: const Color(0xFF5E72E4),
-                          backgroundColor: Colors.grey.shade200,
-                        ),
+                        child: LinearProgressIndicator(color: AppColors.primary, backgroundColor: AppColors.grey200),
                       ),
                   ],
                 );
@@ -103,9 +102,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF5E72E4))),
+                const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary)),
                 const SizedBox(height: 16),
-                Text('Carregando usuários...', style: TextStyle(fontSize: 16, color: Colors.grey[600])),
+                Text('Carregando usuários...', style: AppFonts.medium(16, AppColors.textSecondary)),
               ],
             ),
           );

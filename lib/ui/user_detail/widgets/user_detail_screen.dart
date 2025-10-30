@@ -3,12 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste_bus2/core/app_status.dart';
 import 'package:teste_bus2/di/service_locator.dart';
 import 'package:teste_bus2/domain/models/user_entity.dart';
+import 'package:teste_bus2/ui/core/styles/app_colors.dart';
+import 'package:teste_bus2/ui/core/styles/app_fonts.dart';
+import 'package:teste_bus2/ui/core/ui/default_app_bar.dart';
 import 'package:teste_bus2/ui/core/ui/default_cached_network_image.dart';
 import 'package:teste_bus2/ui/core/ui/info_row.dart';
 import 'package:teste_bus2/ui/core/ui/section_card.dart';
-import 'package:teste_bus2/ui/core/ui/themed_app_bar.dart';
 import 'package:teste_bus2/ui/user_detail/view_model/user_detail_cubit.dart';
 import 'package:teste_bus2/ui/user_detail/view_model/user_detail_state.dart';
+import 'package:teste_bus2/utils/extensions/string_extensions.dart';
 
 class UserDetailScreen extends StatefulWidget {
   final UserEntity user;
@@ -38,15 +41,15 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             state.isSaved
                 ? SnackBar(
-                    content: const Text('Usuário salvo com sucesso!'),
-                    backgroundColor: Colors.green,
+                    content: Text('Usuário salvo com sucesso!', style: AppFonts.regular(14, AppColors.white)),
+                    backgroundColor: AppColors.success,
                     behavior: SnackBarBehavior.floating,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     duration: const Duration(seconds: 2),
                   )
                 : SnackBar(
-                    content: const Text('Usuário removido com sucesso!'),
-                    backgroundColor: Colors.orange,
+                    content: Text('Usuário removido com sucesso!', style: AppFonts.regular(14, AppColors.white)),
+                    backgroundColor: AppColors.warning,
                     behavior: SnackBarBehavior.floating,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     duration: const Duration(seconds: 2),
@@ -57,8 +60,8 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         if (state.status == AppStatus.error) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.errorMessage ?? 'Erro desconhecido'),
-              backgroundColor: Colors.red,
+              content: Text(state.errorMessage ?? 'Erro desconhecido', style: AppFonts.regular(14, AppColors.white)),
+              backgroundColor: AppColors.error,
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               duration: const Duration(seconds: 2),
@@ -67,8 +70,8 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.grey.shade50,
-        appBar: ThemedAppBar(
+        backgroundColor: AppColors.background,
+        appBar: DefaultAppBar(
           title: '${widget.user.name.first} ${widget.user.name.last}',
           actions: [
             BlocBuilder<UserDetailCubit, UserDetailState>(
@@ -80,7 +83,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                     child: SizedBox(
                       width: 24,
                       height: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.white),
                     ),
                   );
                 }
@@ -89,7 +92,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                   onPressed: () {
                     userDetailCubit.toggleUserPersistence(widget.user);
                   },
-                  icon: Icon(state.isSaved ? Icons.favorite : Icons.favorite_border, color: Colors.white),
+                  icon: Icon(state.isSaved ? Icons.favorite : Icons.favorite_border, color: AppColors.white),
                 );
               },
             ),
@@ -102,13 +105,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 32),
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF5E72E4), Color(0xFF825EE4)],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
+                decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
                 child: Column(
                   children: [
                     Container(
@@ -116,19 +113,15 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.2),
-                            blurRadius: 20,
-                            offset: const Offset(0, 4),
-                          ),
+                          BoxShadow(color: AppColors.shadowMedium, blurRadius: 20, offset: const Offset(0, 4)),
                         ],
                       ),
                       child: CircleAvatar(
                         radius: 70,
-                        backgroundColor: Colors.white,
+                        backgroundColor: AppColors.white,
                         child: CircleAvatar(
                           radius: 66,
-                          backgroundColor: Colors.grey[300],
+                          backgroundColor: AppColors.grey200,
                           child: DefaultCachedNetworkImage(imageUrl: widget.user.picture.large, size: 132),
                         ),
                       ),
@@ -147,7 +140,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                     value: '${widget.user.name.title} ${widget.user.name.first} ${widget.user.name.last}',
                   ),
                   InfoRow(label: 'Idade:', value: '${widget.user.dob.age} anos'),
-                  InfoRow(label: 'Gênero:', value: _formatGender(widget.user.gender)),
+                  InfoRow(label: 'Gênero:', value: widget.user.gender.formattedGender),
                 ],
               ),
               // Localização
@@ -210,8 +203,8 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                 title: 'Datas',
                 icon: Icons.calendar_today_outlined,
                 children: [
-                  InfoRow(label: 'Data de Nascimento:', value: _formatDate(widget.user.dob.date)),
-                  InfoRow(label: 'Data de Registro:', value: _formatDate(widget.user.registered.date)),
+                  InfoRow(label: 'Data de Nascimento:', value: widget.user.dob.date.formattedDate),
+                  InfoRow(label: 'Data de Registro:', value: widget.user.registered.date.formattedDate),
                   InfoRow(label: 'Tempo de Registro:', value: '${widget.user.registered.age} anos'),
                 ],
               ),
@@ -227,20 +220,5 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         ),
       ),
     );
-  }
-
-  String _formatGender(String gender) {
-    if (gender.toLowerCase() == 'male') return 'Masculino';
-    if (gender.toLowerCase() == 'female') return 'Feminino';
-    return gender;
-  }
-
-  String _formatDate(String dateString) {
-    try {
-      final date = DateTime.parse(dateString);
-      return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
-    } catch (e) {
-      return dateString.split('T')[0];
-    }
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:teste_bus2/ui/core/styles/app_colors.dart';
+import 'package:teste_bus2/ui/core/styles/app_fonts.dart';
 
 class ErrorStateWidget extends StatelessWidget {
   final String errorMessage;
@@ -24,33 +26,33 @@ class ErrorStateWidget extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(color: Colors.red.shade50, shape: BoxShape.circle),
-              child: Icon(Icons.error_outline, size: 48, color: Colors.red.shade400),
+              decoration: BoxDecoration(color: AppColors.errorBackground, shape: BoxShape.circle),
+              child: Icon(Icons.error_outline, size: 48, color: AppColors.errorLight),
             ),
             const SizedBox(height: 24),
             Text(
               title ?? 'Ops! Algo deu errado',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black87),
+              style: AppFonts.medium(18, AppColors.textPrimary),
             ),
             const SizedBox(height: 8),
             Text(
               errorMessage,
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              style: AppFonts.regular(14, AppColors.textSecondary),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: onRetry,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF5E72E4),
-                foregroundColor: Colors.white,
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 elevation: 2,
               ),
               child: Text(
                 retryButtonText ?? 'Tentar Novamente',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                style: AppFonts.medium(16, AppColors.white),
               ),
             ),
           ],
