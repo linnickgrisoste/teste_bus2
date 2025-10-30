@@ -7,7 +7,7 @@ import 'package:teste_bus2/data/services/setup/api_provider.dart';
 import 'package:teste_bus2/data/services/user_service.dart';
 import 'package:teste_bus2/domain/models/user_entity.dart';
 
-import '../../../fixtures/user_fixture.dart';
+import '../../fixtures/user_fixture.dart';
 
 class MockUserService extends Mock implements UserService {}
 
